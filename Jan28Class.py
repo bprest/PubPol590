@@ -3,11 +3,11 @@ import pandas as pd
 import numpy as np
 import os
 data=0
-#main_dir = "C:\Users\bcp17\OneDrive\Grad School\2015-Spring\Big Data\data\raw"
-#git_dir = "C:\Users\bcp17\OneDrive\Grad School\GitHub\PubPol590"
-main_dir = "C:/Users/bcp17/OneDrive/Grad School/2015-Spring/Big Data/data/raw"
+
+main_dir = u'C:/Users/bcp17/OneDrive/Grad School/2015-Spring/Big Data/data/raw'
 git_dir = "C:/Users/bcp17/OneDrive/Grad School/GitHub/PubPol590"
 csv_file="sample_data_clean.csv"
+cd 'main_dir'`
 
 # OS Module
 data = pd.read_csv(os.path.join(main_dir,csv_file))
@@ -86,5 +86,32 @@ letters = Series(list7)
 print fivetonine
 print letters
 
+# create DataFrames from lists or series. Note that merging two series requires the series be the same length.
+list8 = range(60,65)
+print list5
+print list7
+print list8
+zip1 = zip(list5,list7,list8)
+df1 = DataFrame(zip1)
+print df1
+df1[1] # 2nd column
+df2 = DataFrame(zip1,columns=['row1','orange',':)']) # here, the column labels, 2, 'orange', ':)', are called "Keys".
+df2
+df2['orange'] # orange column
+df2[3:4] # For rows, you have to use the colon bit.
+df2[['orange',':)']][3:5] # df2[listofkeys][startrow:endrow+1], where listofkeys=['orange',':)']
+df2[range(1,3)][3:5] # cols 1-2, rows 3-4.
+df2
+print len(fivetonine)
+print len(letters)
+# make dataframe using dict notation
+print list4
+print list6
+df4= DataFrame({ ':(' : list4, 9  : list6}) # DataFrame({col1name : col1list, col2name : col2list})
+df4
 
+# stacking Series
+df5 = pd.concat([fivetonine, letters]) # concatenate (stack) lists, but it messes up the indices.
+
+df5
 
