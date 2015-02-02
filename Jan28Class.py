@@ -7,7 +7,7 @@ data=0
 main_dir = u'C:/Users/bcp17/OneDrive/Grad School/2015-Spring/Big Data/data/raw'
 git_dir = "C:/Users/bcp17/OneDrive/Grad School/GitHub/PubPol590"
 csv_file="sample_data_clean.csv"
-cd 'main_dir'`
+#cd 'main_dir'
 
 # OS Module
 data = pd.read_csv(os.path.join(main_dir,csv_file))
@@ -52,7 +52,7 @@ print list2
 # tuples, () can't change them
 tup1 = (8,3,74)
 print tup1[2]
-tup1(3)=36
+#tup1(3)=36 # won't work
 print tup1
 
 # can convert things
