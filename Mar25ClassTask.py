@@ -8,11 +8,12 @@ import os
 
 print(time.ctime())
 start = time.time()
-main_dir = u'C:/Users/Brianprest/OneDrive/Grad School/2015-Spring/Big Data/data/raw/'
-#main_dir = u'C:/Users/bcp17/OneDrive/Grad School/2015-Spring/Big Data/data/raw/'
+main_dir = u'C:/Users/Brianprest/OneDrive/Grad School/2015-Spring/Big Data/data/raw/3_task_data/'
+#main_dir = u'C:/Users/bcp17/OneDrive/Grad School/2015-Spring/Big Data/data/raw/3_task_data/'
 root = main_dir
 allocation = "allocation_subsamp.csv"
 kwh = "kwh_redux_pretrial.csv"
+survey = "Smart meters Residential pre-trial survey data.csv"
 
 df_assign = pd.read_csv(root + allocation, header=0)
 
@@ -32,20 +33,20 @@ selection_B3 = np.random.choice(B3_ids,size=50,replace=False).tolist()
 
 selection_all = pd.DataFrame(selection_control+selection_A1+selection_A3+selection_B1+selection_B3, columns=["ID"])
 
-df = pd.read_csv(root + kwh, header=0, parse_dates=[2], date_parser=np.datetime64)
+df = pd.read_csv(root + kwh, header=0)
 # Merge on selected IDs
 df = pd.merge(selection_all,df)
 # Generate Month/Year variable
-df['ym'] = pd.DatetimeIndex(df['date']).to_period('M').values # 'M'=month, 'D',=day, etc.
+
 
 # Sum monthly consumption
-monthgrp = df.groupby(['ID','ym'])
+monthgrp = df.groupby(['ID','month']) # only 1 year in the data, so we can just group by month
 df = monthgrp['kwh'].sum().reset_index()
 
 # Pivot to wide on monthly kwh
-df['kwh_ym'] = 'kwh_' + df.ym.apply(str)
+df['kwh_mon'] = 'kwh_' + df['month'].apply(str)
 
-df_piv = df.pivot('ID','kwh_ym','kwh') # i,j,v. i is rows. j is columns, v is values to go in j columns.
+df_piv = df.pivot('ID','kwh_mon','kwh') # i,j,v. i is rows. j is columns, v is values to go in j columns.
 df_piv.reset_index(inplace=True)
 df_piv.columns.name = None # gets rid of top left thing
 
@@ -85,3 +86,11 @@ print(logit_results_A1.summary())
 print(logit_results_A3.summary())
 print(logit_results_B1.summary())
 print(logit_results_B3.summary())
+
+
+# Questions to include:
+# 405 - Internet access (could affect treatment through technical constraints)
+# 433 - Did past efforts reduce bills? (History of failed efforts could affect size of treatment effect)
+# 4352 - Agreement with "reducing my usage would not make enough difference to my bill"
+# 450 - Kind of house (apartment, detached, semi-deteached, etc.)
+df_survey = pd.read_csv(root + survey, header=0)
